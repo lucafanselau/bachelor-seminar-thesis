@@ -135,4 +135,8 @@ dmypy.json
 *.toc
 *.bbl
 
+out
+__latexindex_temp.tex
+
 .DS_Store
+paper/__latexindent_temp.tex
