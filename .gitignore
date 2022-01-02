@@ -122,3 +122,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Latex builds
+.auctex-auto
+*.aux
+*.fdb_latexmk
+*.fls
+*.blg
+*.lof
+*.lot
+*.out
+*.toc
+*.bbl
+
+.DS_Store
