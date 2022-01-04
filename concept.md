@@ -84,6 +84,10 @@ Sub chapters:
 
 No video for that
 
+- https://www.semanticscholar.org/paper/Evaluating-car-sharing-fleet-management-strategies-Chellanthara/26a017498f6f529f4f7ed7908e59c2944a4d834f
+
+- https://web.mit.edu/osorioc/www/papers/zhoOsoFieCarSharing.pdf
+
 ## Literature Management
 
 
