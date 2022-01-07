@@ -88,6 +88,9 @@ No video for that
 
 - https://web.mit.edu/osorioc/www/papers/zhoOsoFieCarSharing.pdf
 
+- https://pubsonline.informs.org/doi/abs/10.1287/trsc.31.1.34
+
+- https://www.share-now.com/de/de/rhineland-ppc1/?cid=sn_ppc_de_rhl_none_performance_google_generic-tcepsorp_none_none_none_none_none_none_none_none&gclid=CjwKCAiA5t-OBhByEiwAhR-hmzhuzcR3bAZqji7B3MewU2dfGLzqf6SeLW5qSoUaBE000MRvGNpKkBoCllUQAvD_BwE
 ## Literature Management
 
 
