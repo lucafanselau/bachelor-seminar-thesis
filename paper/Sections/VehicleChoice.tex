@@ -4,10 +4,69 @@
 
 Mathematical description of vehicle choice model
 
-Maybe a model that calculates if a vehicle will be rented
+% Maybe a model that calculates if a vehicle will be rented
 Palette: https://flatuicolors.com/palette/ru
+
+
+\subsection{Data source}
+\label{sub_sec:DataSource}
+
+- Dataset 4gb
+- Zensus data
+
+
+\subsection{Data preparation}
+\label{sub_sec:DataPreparation}
+
+- Huge bias towards smart fourtwo
+- Missing income
+- 
+
+
 \begin{itemize}
   \item House hold -> Size relation
   \item College to size -> No real thingy
-  \item Dataset: https://www.kaggle.com/steventaylor11/stated-preferences-for-car-choice
+  % \item Dataset: https://www.kaggle.com/steventaylor11/stated-preferences-for-car-choice
 \end{itemize}
+
+Features:
+
+We propose a person, which is defined by a feature vector. From now on a person strictly refers to a specific realization 
+of these features unless mentioned otherwise. 
+
+\begin{longtable}{l | c}
+  \caption{Features}
+  \label{table:features}
+  \\
+  \textbf{Label} & \textbf{Description} \\
+  \hline
+  age & The current age of this person, must be > 18 years. unbounded otherwise \\
+  hss & Household size\\
+  college & 1 (or true) if the person had college education, 0 (or false) otherwise \\
+  income & Monthly income, before taxes \\
+  comm & Commuting distance (daily)
+\end{longtable}
+
+Scoring algorithm with the following "decisions":
+
+Early opt out case: $age < 21$: Typically only the XS category is allowed to be driven by persons under the age of 21.
+Otherwise we will employ a scoring algorithm which, where we calculate a score $s(o)$ where 
+$o \in \{ \textrm{XS}, \textrm{S}, \textrm{M}, \textrm{L} \} = C$. The score is based on various sub-scores, namely:
+$$
+s_0(o) = 
+\begin{cases}
+  1 - P(\text{hss} > 2 \land \text{category} = o), & \text{if}\ \text{hss}\ \le 2 \\
+  P(\text{hss} > 2 \land \text{category} = o), & \text{otherwise}
+\end{cases}
+$$
+where $P(\text{hss} > 2 \land \text{category} = o) \ \forall o \in C$ is determined empirically by using the data source 
+mentioned in \ref{sub_sec:DataSource} and can be found in the Appendix\todo{Add that to the Appendix}. Another important 
+scoring mechanism depictures a correlation between commuting distance and the size an can be similarily described as:
+$$
+s_1(o) = 
+\begin{cases}
+  1 - P(\text{comm} > 2 \land \text{category} = o), & \text{if}\ \text{hss}\ \le 2 \\
+  P(\text{comm} > 2 \land \text{category} = o), & \text{otherwise}
+\end{cases}
+$$
+
