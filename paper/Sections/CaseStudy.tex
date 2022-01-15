@@ -1,0 +1,99 @@
+\clearpage
+\section{Case Study Berlin SHARE NOW}
+\label{sec:CaseStudy}
+
+The methods described in Section \ref{sec:Method} are now applied to the specific case
+of ShareNow in Berlin during a period between October 2019 and March 2020. Firstly
+we will discuss ShareNow as a company and then later the dataset and the insights it
+can deliver as well as the trained classifier and its application in the Simulation
+environment we have described above. 
+
+\subsection{SHARE NOW}
+
+ShareNow is the world wide leading free-floating car-sharing service.
+As a free-floating service the user can pick up an available car anywhere in a defined zone
+and finish the trip anywhere in that zone. It is currently available in 16 european cities
+with 11000 vehicles, with nearly 3000 electric vehicles. With about 3.4 million customers
+it has a unprecedented set of car-sharing users \cite{ShareNowAboutUs}. It was founded as 
+part of a larger a joint venture of the BMW Group and the Daimler AG, which also includes
+services like PARK NOW, CHARGE NOW, REACH NOW and FREE NOW. Both firms brought in their
+existing car-sharing solutions, namely Car2Go a subsidiary of the Daimler AG and DriveNow
+a subsidiary of the BMW Group. The merge led to an increase in ease of use for customers
+while the venture parties could secure the leading market share at many of europeans
+largest car-sharing sites.
+
+
+\subsection{Data sources}
+\label{sub_sec:CaseStudy/Data}
+
+This Case Study is primarily based on a dataset which includes 1.983.246 datapoints, each 
+representing a trip made through SHARE NOWs service. Along other interesting fields each data point
+contains the vehicle model of the rental as well as the location where the rental was started.
+This data could then be joined with publicly available socio demographic data from Zensus 2011, a census
+commissioned by the statistical federal office. This then captures the concept of an area (\ref{sub_sec:Method/Concepts/Area})
+and can therefore be used to train a classification model on top of. Prior to that, the data points
+that contained ill formed data with regards to our feature vector were removed and the 
+demographic data was normalized to adhere to the invariant described during the definition of a
+well formed area. In total 
+
+
+\subsection{Fleet}
+\label{sub_sec:CaseStudy/Fleet}
+
+SHARE NOW uses an extensive fleet of vehicles for its car-sharing service according to their website. The data
+for Berlin however indicates a slightly smaller set of available vehicles for that region. Throughout the
+period of data collection a total of 3946 unique vehicles were tracked in the zone, with the following
+distribution.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.5\linewidth]{./Figures/fleet.png}
+  \caption{Number of unique vehicles by class}
+  \label{fig:Fleet}
+\end{figure}
+
+As can be seen in Figure \ref{fig:Fleet} the number of vehicles of each type is far from equally distributed.
+The dominant model in terms of number of vehicles is by far the smart fortwo with 1007 unique vehicles, 
+offering a high value proposition
+in terms of parking space and ease of use for urban commuting. A clear tendency towards smaller cars, such as smarts
+or minis is visible in the distribution. The least common model on the other hand is the BMW X2 with just 29 unique vehicles,
+further indicating the increased demand for smaller vehicles in this specific car-sharing system.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.5\linewidth]{./Figures/travels.png}
+  \caption{Number of rentals by class}
+  \label{fig:Rentals}
+\end{figure}
+
+As can be seen in Figure \ref{fig:Rentals} the actual realized demand of each model maps quite nicely
+onto the number of unique vehicles in the fleet with only a few exception. Notably though the smart has
+seen even more demand then indicated by the number of vehicles. While the sum of all mini vehicles in terms
+of unique vehicles comes close to the number of smarts deployed, the number of unique rentals of a smart
+is greater then the sum of rentals made with all other vehicle types.
+
+The missing component however is the set of decidable classes. Similarly to the real world fleet deployment the
+set of models is structured in terms of vehicle classes, namely $\mathbb{C} = \{ \text{XS}, \text{S}, \text{M}, \text{L} \}$.
+Then each model was assigned to its matching class which can be found in table \ref{table:VehicleClasses}.
+These classes play an important role in the operational management of the car-sharing fleet since they differ in terms of costs and therefore profit.
+Another important aspect of these classes is that younger drivers, in the case of SHARE NOW in Germany drivers below an age of 21, are typically
+restricted to the lowest class, which for this specific case contains just the model type smart fortwo and might explain
+the extremely high demand for that model. Additionally we will define the cost function used in the simulation stage
+of the framework based on the actual minute based pricing model of SHARE NOW. Although SHARE NOW also offers other tariffs we will focus one
+the on-demand minute based charge system for this implementation \cite{ShareNowPricing}.
+$$
+C(c, t) = \begin{cases}
+  t * 0.09, & \text{if $c$ = XS}\\
+  t * 0.28, & \text{if $c$ = S}\\
+  t * 0.31 + 0.99, & \text{if $c$ = M}\\
+  t * 0.34 + 0.99, & \text{if $c$ = L}\\
+ \end{cases}
+$$
+
+
+\subsection{Classifier}
+\label{sub_sec:CaseStudy/Classifier}
+
+
+\subsection{Simulation}
+\label{sub_sec:CaseStudy/Simulation}
