@@ -1,7 +1,15 @@
 import simpy
 
+classes = ["XS", "S", "M", "L"]
 
-def car(env: simpy.Environment):
+
+class Station:
+
+    def __init__(self, env: simpy.Environment) -> None:
+        self.env = env
+        self.store = { c: 0 for c in classes}
+
+def customer(env: simpy.Environment):
     while True:
         print(f"start parking at {env.now}")
         parking_duration = 5
@@ -12,8 +20,11 @@ def car(env: simpy.Environment):
         yield env.timeout(trip_duration)
 
 
+def setup(env: simpy.Environment):
+    # Create the stations
+
 env = simpy.Environment()
-env.process(car(env))
+env.process(setup(env))
 
 
-env.run(until=15)
+env.run(until=24 * 60)
