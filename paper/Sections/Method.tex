@@ -33,25 +33,24 @@ cost in local currency.
 \subsubsection{Area}
 \label{sub_sec:Method/Concepts/Area}
 
-% TODO: Needs to be rewritten with actual groups
-
 An area is an approximation of different socio-demographic distributions with regard to 
-distinct classes. More specifically an area is defined in terms of the age function:
+distinct categories, such as age, income or marital status. Formally a category is defined by the random variable $X$ which
+comes from an unknown distribution with value range $K$. For the framework $X$ is then
+captured in terms of probability of lying in specific
+subclasses $R_K$, where $R_K$ is a partition of $K$, meaning that
+$\bigcup_{r \in R} r = K$ and $a \cap b = \emptyset \ \forall a, b \in R$. Leading to the
+specification of the distribution of $X$ for our framework:
 $$
-\text{age}(a) = \{ P(d \in r): \forall r \in \mathbb{AG} \}
+Z_X = \{ (r, P(X \in r)) \ |\ r \in R \}
 $$
-where $\mathbb{AG} = \{ [0,17], [18,29], [30,49], [50,64], [65,\infty) \}$, $d \in D$ is the
-actual age distribution for that particular area and $a$ is a valid area. The actual probability 
-values will be determined empirically. Additional, due to the fact that the
-Age Groups (AG) contains all possible values that $D$ can realize, the invariant 
-$\sum_{p \in \text{age}(a)} p = 1$ holds true for every valid area. Another important 
-characteristic is described by the income function of the area.
+This values are sourced by empirical studies and are specified in the actual implementation
+of the proposed framework.
+Due to the fact that $R$ is a partition of $K$ the following invariant must hold true: $\sum_{z \in Z_X} z = 1$.
+An area is then defined in terms of the set of categories $\mathbb{X}$ that are analyzed in the implementation 
+and can therefore be described as:
 $$
-\text{income}(a) = \{ P(i \in r): \forall r \in \mathbb{IG} \}
+a = \{ Z_X \ | \ \forall X \in \mathbb{X} \}
 $$
-where $\mathbb{IG} = \{ [0,899], [900, 1499], [1500, \infty) \}$ and $i \in I$ is the actual distribution
-of income for the area $a$. This data will also be expected to be given and the same invariant holds true:
-$\sum_{p \in \text{income}(a)} p = 1$.
 
 \subsubsection{Station}
 \label{sub_sec:Method/Concepts/Station}
@@ -65,13 +64,13 @@ is bounded by the parameter $C$ (Capacity), such that $\Delta_s(t, c) \ge -C \ \
 Representing the inability to satisfy customer requests after a maximum capacity is reached.
 
 Leading to the spatial structure of the simulation environment, that is a fully connected graph where the nodes are 
-the set of all stations in the simulation, called $\mathbb{S}$, and the edges of that graph $\mathbb{E}$. An implementation
+the set of all stations in the simulation, called $\mathbb{S}$, and the edges of that graph called $\mathbb{E}$. An implementation
 is required to provide a distance mapping $L: \mathbb{E} \to \mathbb{R}$, providing weights for the edges of the graph.
 
 \subsubsection{Customer Request}
 \label{sub_sec:Method/Concepts/Request}
 
-A crucial part is the customer request $r$, since that is the data that we will train on and use in the simulation
+Another crucial part is the customer request $r$, since that is the data that we will train on and use in the simulation
 environment to structure new requests. Prior to deciding on the vehicle class a user has knowledge about
 the starting station $s_{r, 0}$ and end station $s_{r, 1}$ that he/she wants to travel between. The request is also expected
 to be sourced at station $s_{r, 0}$ and therefore adheres to the socio demographic factors defined by the $\text{area}(s_{r, 0})$.

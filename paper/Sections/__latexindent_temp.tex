@@ -1,187 +1,114 @@
 \clearpage
-\section{Method}
-\label{sec:Method}
+\section{Case Study Berlin SHARE NOW}
+\label{sec:CaseStudy}
 
-In a heterogeneous fleet of vehicles that is typically deployed by a car-sharing operator,
-having insights of the features determining the vehicle choice of a customer is key
-to operate in an efficient manner. This includes features like availability, travel-time
-and driving distance, but also socio-demographic features of the area in which the
-car-sharing system is deployed. During this study we will develop a classifier which 
-captures this relation and use it to analyze a inter-area connected network of stations
-during a discrete event driven simulation phase to get insights on performance critical
-metrics.
+The methods described in Section \ref{sec:Method} are now applied to the specific case
+of ShareNow in Berlin during a period between October 2019 and March 2020. Firstly
+we will discuss ShareNow as a company and then later the dataset and the insights it
+can deliver as well as the trained classifier and its application in the Simulation
+environment we have described above. 
 
-\subsection{Concepts}
-\label{sub_sec:Method/Concepts}
+\subsection{SHARE NOW}
 
-Firstly a set of concepts is defined, that will be important in the further discussion.
+ShareNow is the world wide leading free-floating car-sharing service.
+As a free-floating service the user can pick up an available car anywhere in a defined zone
+and finish the trip anywhere in that zone. It is currently available in 16 european cities
+with 11000 vehicles, with nearly 3000 electric vehicles. With about 3.4 million customers
+it has a unprecedented set of car-sharing users \cite{ShareNowAboutUs}. It was founded as 
+part of a larger a joint venture of the BMW Group and the Daimler AG, which also includes
+services like PARK NOW, CHARGE NOW, REACH NOW and FREE NOW. Both firms brought in their
+existing car-sharing solutions, namely Car2Go a subsidiary of the Daimler AG and DriveNow
+a subsidiary of the BMW Group. The merge led to an increase in ease of use for customers
+while the venture parties could secure the leading market share at many of europeans
+largest car-sharing sites.
 
-\subsubsection{Vehicle Classes}
-\label{sub_sec:Method/Concepts/Classes}
 
-Since we are analyzing a fleet of heterogeneous vehicles, we define the set of vehicle
-classes $\mathbb{C}$, to be the set of possible vehicle choices a customer can make. A
-discrete example of these vehicle classes can be found in the case study later on. These
-classes are also used to determine the pricing of a trip. An implementation of this
-framework is expected to define a pricing function:
-$$
-\text{cost}: \mathbb{C} \times  \mathbb{R} \to \mathbb{R}
-$$
-where the input is the rented class and the time traveled in minutes and the output is the
-cost in local currency.
+\subsection{Data sources}
+\label{sub_sec:CaseStudy/Data}
 
-\subsubsection{Area}
-\label{sub_sec:Method/Concepts/Area}
+This Case Study is primarily based on a dataset which includes 1.983.246 datapoints, each 
+representing a trip made through SHARE NOWs service. Along other interesting fields each data point
+contains the vehicle model of the rental, the location where the rental was started as well as the distance of the trip.
+This data was then joined with publicly available socio-demographic data from Zensus 2011, a census
+commissioned by the statistical federal office. 
 
-% TODO: Needs to be rewritten with actual groups
 
-An area is an approximation of different socio-demographic distributions with regard to 
-distinct classes. More specifically an area is defined in terms of the age function:
-$$
-\text{age}(a) = \{ P(d \in r): \forall r \in \mathbb{AG} \}
-$$
-where $\mathbb{AG} = \{ [0,17], [18,29], [30,49], [50,64], [65,\infty) \}$, $d \in D$ is the
-actual age distribution for that particular area and $a$ is a valid area. The actual probability 
-values will be determined empirically. Additional, due to the fact that the
-Age Groups (AG) contains all possible values that $D$ can realize, the invariant 
-$\sum_{p \in \text{age}(a)} p = 1$ holds true for every valid area. Another important 
-characteristic is described by the income function of the area.
-$$
-\text{income}(a) = \{ P(i \in r): \forall r \in \mathbb{IG} \}
-$$
-where $\mathbb{IG} = \{ [0,899], [900, 1499], [1500, \infty) \}$ and $i \in I$ is the actual distribution
-of income for the area $a$. This data will also be expected to be given and the same invariant holds true:
-$\sum_{p \in \text{income}(a)} p = 1$.
+\subsection{Fleet}
+\label{sub_sec:CaseStudy/Fleet}
 
-\subsubsection{Station}
-\label{sub_sec:Method/Concepts/Station}
-
-The Station is an important concept for the simulation stage of the proposed framework. A station is always
-inside a particular area, namely there exists a function $\text{area}(s)$ which returns the area that the 
-station is placed in. Additionally a station has a state that is kept and updated throughout the simulation
-stage, this includes a function which for every time $t \in \mathbb{R}$ and class $c \in \mathbb{C}$ returns
-the delta of cars of class $c$ rented up until that time: $\Delta_s: \mathbb{R} \times \mathbb{C} \to \mathbb{N}$. This function
-is bounded by the parameter $C$ (Capacity), such that $\Delta_s(t, c) \ge -C \ \forall t \in \mathbb{R} \land c \in \mathbb{C}$.
-Representing the inability to satisfy customer requests after a maximum capacity is reached.
-
-Leading to the spatial structure of the simulation environment, that is a fully connected graph where the nodes are 
-the set of all stations in the simulation, called $\mathbb{S}$, and the edges of that graph $\mathbb{E}$. An implementation
-is required to provide a distance mapping $L: \mathbb{E} \to \mathbb{R}$, providing weights for the edges of the graph.
-
-\subsubsection{Customer Request}
-\label{sub_sec:Method/Concepts/Request}
-
-A crucial part is the customer request $r$, since that is the data that we will train on and use in the simulation
-environment to structure new requests. Prior to deciding on the vehicle class a user has knowledge about
-the starting station $s_{r, 0}$ and end station $s_{r, 1}$ that he/she wants to travel between. The request is also expected
-to be sourced at station $s_{r, 0}$ and therefore adheres to the socio demographic factors defined by the $\text{area}(s_{r, 0})$.
-A User request is always created inside of a station graph that describes the simulation environment and can therefore
-be extended by the implicit attribute $l_r$ (distance travelled), that is given by the travelled edge $e_r = (s_{r, 0}, s_{r, 1}) \in \mathbb{E}$
-and the distance measure $l_r = L(e_r)$. The set of all possible customer request will be referred to as $R$.
-
-\subsection{Classification Model}
-\label{sub_sec:Method/Class}
-
-Using those basic concepts we can now define a classification model whose
-main objective is to find a relation between a customer request, combining the socio-demographic factors of the area
-and the planned travel distance, and the decision that would be made. We also want to determine the
-probability of each class, so that we can later study the Substitution Effect descibed in Section \ref{sub_sec:Method/Substitution}
-that captures a equality towards different decisions and can be controlled during the
-simulation stage of the framework. We therefore propose a model whose objective is to
-approximate the function $P(c \ | \ r)$ where $c \in \mathbb{C}$ the vehicle class and  $r \in R$ the request.
-Given this classifier, a prediction can be made which vehicle type is most likely to be chosen based
-on a particular customer request.
-
-A typical classifier that would be used in this scenario is the Naive Bayes Classifier that utilizes
-Bayes rule to rewrite the above mentioned probability into $P(c \ | \ r) = \frac{P(c)P(r \ | \ c)}{P(r)}$
-which can then be computed based on the strong assumption of conditional independence of the features.
-Although this assumption is often violated, as with our proposed framework, since the feature groups
-are technically not independent of one another, this type of classifier delivers competitive results.
-Other benefits of the Naive Bayer Classifier include a high computational efficiency, fairly low variance
-and most importantly for our setting a direct predication of posterior probabilities. \cite{Webb2010}
-
-\subsection{Substitution Effect}
-\label{sub_sec:Method/Substitution}
-
-It is however noteworthy that this decision is only
-partly driven by just the factors, that are provided by the customer request, since especially in free-floating car-sharing services
-other factors like distance to closest vehicle can dominate the actual decision process even against personal
-preference. To capture this effect in a simplified form we will introduce a parameter $\alpha \in \mathbb{R}$
-called the Substitution Effect, that captures the willingness to decide against the most likely
-decision at random. Formally the set of all class decision $D$ of a customer request $r \in R$ and the 
-Substitution effect $\alpha$ can then be defined as follows:
-$$
-  D(r, \alpha) = \{ c \ | \ c \in \mathbb{C} \land P(c \ | \ r) \ge \max\{ P(d \ | \ r) \ | \ d \in \mathbb{C} \} - \alpha \}
-$$
-This set then includes every class that with regards to the value of $\alpha$ a user would consider renting.
-
-\subsection{Simulation}
-\label{sub_sec:Method/Simulation}
-
-Understanding the dynamics of a complex system like a car-sharing system analytically is exceptionally difficult.
-One can however use Simulation to assess typical dynamics and get a quick insight on important performance metrics
-like ratio of satisfied customers, total distance driven or total sales volume. Additionally the Simulation
-environment should be easily extensible to enable further study on different network effects. 
+SHARE NOW uses an extensive fleet of vehicles for its car-sharing service according to their website. The data
+for Berlin however indicates a slightly smaller set of available vehicles for that region. Throughout the
+period of data collection a total of 3946 unique vehicles were tracked in the zone, with the following
+distribution.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.5\linewidth]{./Figures/event-flow.png}
-  \caption{Simulation flow}
-  \label{fig:Flow}
+  \includegraphics[width=.5\linewidth]{./Figures/fleet.png}
+  \caption{Number of unique vehicles by class}
+  \label{fig:Fleet}
 \end{figure}
 
-A discrete-event simulation is employed, as described in Figure \ref{fig:Flow}, that aims to model a typical day of operation
-for the car-sharing network. A discrete event simulation is a simulation where the flow of time is not continuous but driven
-by events, such as time passed. It enables a computational efficient way to model complex systems and is a good fit for the
-proposed simulation. A discrete event simulation consists of processes that can interact with other processes, access and modify
-shared resources and create and listen to events.
+As can be seen in Figure \ref{fig:Fleet} the number of vehicles of each type is far from equally distributed.
+The dominant model in terms of number of vehicles is by far the smart fortwo with 1007 unique vehicles, 
+offering a high value proposition
+in terms of parking space and ease of use for urban commuting. A clear tendency towards smaller cars, such as smarts
+or minis is visible in the distribution. The least common model on the other hand is the BMW X2 with just 29 unique vehicles,
+further indicating the increased demand for smaller vehicles in this specific car-sharing system.
 
-The process that a typical customer request would flow through is given by Figure \ref{fig:Flow}. The flow is started by the
-event that a customer request is sourced. This event happens periodically based on the average time period of demand $p_h$, determined
-beforehand by existing demand data for each hour of the day $h \in [0,24)$. The timestamp a customer request is registered with the system
-is called $t_0$ from now on.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.5\linewidth]{./Figures/travels.png}
+  \caption{Number of rentals by class}
+  \label{fig:Rentals}
+\end{figure}
 
-The customer then needs to make a vehicle decision based on the request $r$ and the current Substitution Effect
- $\alpha$ resulting in $D(r, \alpha)$. The framework then calculates a more restricted set of available
-possible vehicle choices $D'(\text{area}(s), \alpha) = \{c \ |\ c \in D(\text{area}(s), \alpha) \land \Delta_s(t_0, c) > -C\}$ which
-includes the capacity restriction mentioned in Section \ref{sub_sec:Method/Concepts/Station}. If $D'$ is an empty set, the customer
-request is labeled "unsatisfied" and $r$ is added to the set of unsatisfied requests $\mathbb{UR}$. Otherwise a random unbiased choice between the classes in 
-the set $D'$ is made resulting in the chosen class $c$ and the state of the station is updated such that that 
+As can be seen in Figure \ref{fig:Rentals} the actual realized demand of each model maps quite nicely
+onto the number of unique vehicles in the fleet with only a few exception. Notably though the smart has
+seen even more demand then indicated by the number of vehicles. While the sum of all mini vehicles in terms
+of unique vehicles comes close to the number of smarts deployed, the number of unique rentals of a smart
+is greater then the sum of rentals made with all other vehicle types.
+
+The missing component however is the set of decidable classes. Similarly to the real world fleet deployment the
+set of models is structured in terms of vehicle classes, namely $\mathbb{C} = \{ \text{XS}, \text{S}, \text{M}, \text{L} \}$.
+Then each model was assigned to its matching class which can be found in table \ref{table:VehicleClasses}.
+These classes play an important role in the operational management of the car-sharing fleet since they differ in terms of costs and therefore profit.
+Another important aspect of these classes is that younger drivers, in the case of SHARE NOW in Germany drivers below an age of 21, are typically
+restricted to the lowest class, which for this specific case contains just the model type smart fortwo and might explain
+the extremely high demand for that model. Additionally we will define the cost function used in the simulation stage
+of the framework based on the actual minute based pricing model of SHARE NOW. Although SHARE NOW also offers other tariffs we will focus one
+the on-demand minute based charge system for this implementation \cite{ShareNowPricing}.
 $$
-\Delta_{s_{r, 0}}(t_0 + \epsilon, c) = \Delta_{s_{r, 0}}(t_0, c) - 1
-$$.
- 
-Following this the customer starts its rental and travels to $s_{r, 1}$. This takes him an amount of time $\delta t$ given by 
-$\delta t = l_r / \text{AS}$ where AS (average speed) is the average speed of urban commute. This customer then reaches
-station $s_{r, 1}$ at time $t_1 = t_0 + \delta t$ and increases the delta function of the target station similarly to
+C(c, t) = \begin{cases}
+  t * 0.09, & \text{if $c$ = XS}\\
+  t * 0.28, & \text{if $c$ = S}\\
+  t * 0.31 + 0.99, & \text{if $c$ = M}\\
+  t * 0.34 + 0.99, & \text{if $c$ = L}\\
+ \end{cases}
 $$
-\Delta_{s_{r, 1}}(t_1 + \epsilon, c) = \Delta_{s_{r, 1}}(t_1, c) + 1
-$$.
 
-The rental is then counted as complete, added to the set of satisfied requests $mathbb{SR}$ and the total profit $\pi$ is increased by $\text{cost}(c, l_r)$, completing the
-customer request process. One run of the simulation framework simulates a whole day and includes the station network
-as a shared resource.
+\subsection{Data preparation}
+\label{sub_sec:CaseStudy/Preparation}
+
+Before one could train the actual classifier the data had to be prepared to adhere to the from
+required by the framework. Using the zensus data an area description for each request was
+build where the set of categories to be analyzed includes the age distribution as well as the martial status.
+$\mathbb{X} = \{ \text{AGE}, \text{MARTIAL} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
+Subsequently rows with missing of malformed data were removed.
+
+In early training iterations another important imbalance in the dataset was discovered. Classification models
+trained on the data had a tendency to favor the "XS" class since there were far more rentals done with
+vehicles from that class. To counteract that, since the set of features was missing an indicator for availability
+of vehicles the data for each class was shuffled and truncated in such a way that
+$\frac{nv(c_a)}{nv(c_b)} = \frac{nd(c_a)}{nd(c_b)} \ \forall c_a, c_b \in \mathbb{C}$, where $nv: \mathbb{C} \to \mathbb{N}$ is a function
+that returns the number of vehicles of a specific category and $nd: \mathbb{C} \to \mathbb{N}$ is a function that returns the
+amount of datapoints in the training set for each category. Leading to a dataset where the decision for a vehicle
+should not be dominated by the amount of vehicles of that class.
+
+\subsection{Classifier}
+\label{sub_sec:CaseStudy/Classifier}
+
+Resulting in a dataset that mapped the framework definition of the customer request onto 
 
 
-\subsection{Metric \& Performance}
-\label{sub_sec:Method/Metrics}
-
-Resulting in performance metrics that can give valuable insights on the dynamics of the environment and
-allows to analyze the effects of the models parameters such as the Substitution Effect $\alpha$ and the
-capacity restriction $C$. The metrics can be loosely structured into time dependant and time independent metrics
-and are present in the following section:
-
-\vspace*{2ex}
-\noindent
-\renewcommand\tabularxcolumn[1]{m{#1}}
-\begin{tabularx}{\textwidth}{@{}c|c|X@{}}
-  \textbf{Metric} & \textbf{Defintion} & \textbf{Description} \\
-  \hline
-  \multicolumn{3}{@{}l}{Time independent metrics:} \\\hline 
-  URR & $\frac{|UR|}{|UR| \times |SR|}$ & The \textbf{U}nsatisfied \textbf{R}equest \textbf{R}atio, eg. the ratio of unsatisfied customers to all customers \\
-  $\pi$ & {--} & The total profit of the simulation \\
-  \hline
-  \multicolumn{3}{@{}l}{Time dependent metrics:} \\
-  \hline
-\end{tabularx}
-
+\subsection{Simulation}
+\label{sub_sec:CaseStudy/Simulation}

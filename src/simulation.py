@@ -1,14 +1,20 @@
+from math import floor
 import simpy
+import pandas as pd
 
 classes = ["XS", "S", "M", "L"]
 
 
 class Station:
-
-    def __init__(self, env: simpy.Environment) -> None:
+    def __init__(self, env: simpy.Environment, name: str, area_data) -> None:
         self.env = env
         self.store = { c: 0 for c in classes}
+        self.name = name
+        self.area_data = area_data
 
+    def __str__(self) -> str:
+        return f"{self.name}: ${self.area_data}"
+        
 def customer(env: simpy.Environment):
     while True:
         print(f"start parking at {env.now}")
@@ -20,11 +26,23 @@ def customer(env: simpy.Environment):
         yield env.timeout(trip_duration)
 
 
-def setup(env: simpy.Environment):
+def spawner(env: simpy.Environment):
+    while True:
+        hour = floor(env.now / 60)
+        
+
+
+def setup(station_data: pd.DataFrame):
+    env = simpy.Environment()
+    
     # Create the stations
+    stations = [Station(env, n, d) for (n, d) in station_data.iterrows()]
 
-env = simpy.Environment()
-env.process(setup(env))
+    env.process(spawner(env))
+
+    # env.run(until=24 * 60)
 
 
-env.run(until=24 * 60)
+
+
+

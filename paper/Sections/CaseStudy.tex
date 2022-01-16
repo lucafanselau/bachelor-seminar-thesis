@@ -28,13 +28,9 @@ largest car-sharing sites.
 
 This Case Study is primarily based on a dataset which includes 1.983.246 datapoints, each 
 representing a trip made through SHARE NOWs service. Along other interesting fields each data point
-contains the vehicle model of the rental as well as the location where the rental was started.
-This data could then be joined with publicly available socio demographic data from Zensus 2011, a census
-commissioned by the statistical federal office. This then captures the concept of an area (\ref{sub_sec:Method/Concepts/Area})
-and can therefore be used to train a classification model on top of. Prior to that, the data points
-that contained ill formed data with regards to our feature vector were removed and the 
-demographic data was normalized to adhere to the invariant described during the definition of a
-well formed area. In total 
+contains the vehicle model of the rental, the location where the rental was started as well as the distance of the trip.
+This data was then joined with publicly available socio-demographic data from Zensus 2011, a census
+commissioned by the statistical federal office. 
 
 
 \subsection{Fleet}
@@ -90,9 +86,28 @@ C(c, t) = \begin{cases}
  \end{cases}
 $$
 
+\subsection{Data preparation}
+\label{sub_sec:CaseStudy/Preparation}
+
+Before one could train the actual classifier the data had to be prepared to adhere to the from
+required by the framework. Using the zensus data an area description for each request was
+build where the set of categories to be analyzed includes the age distribution as well as the martial status.
+$\mathbb{X} = \{ \text{AGE}, \text{MARTIAL} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
+Subsequently rows with missing of malformed data were removed.
+
+In early training iterations another important imbalance in the dataset was discovered. Classification models
+trained on the data had a tendency to favor the "XS" class since there were far more rentals done with
+vehicles from that class. To counteract that, since the set of features was missing an indicator for availability
+of vehicles the data for each class was shuffled and truncated in such a way that
+$\frac{nv(c_a)}{nv(c_b)} = \frac{nd(c_a)}{nd(c_b)} \ \forall c_a, c_b \in \mathbb{C}$, where $nv: \mathbb{C} \to \mathbb{N}$ is a function
+that returns the number of vehicles of a specific category and $nd: \mathbb{C} \to \mathbb{N}$ is a function that returns the
+amount of datapoints in the training set for each category. Leading to a dataset where the decision for a vehicle
+should not be dominated by the amount of vehicles of that class.
 
 \subsection{Classifier}
 \label{sub_sec:CaseStudy/Classifier}
+
+Resulting in a dataset that mapped the framework definition of the customer request onto 
 
 
 \subsection{Simulation}
