@@ -43,7 +43,7 @@ distribution.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.5\linewidth]{./Figures/fleet.png}
+  \includegraphics[width=.3\linewidth]{./Figures/fleet.png}
   \caption{Number of unique vehicles by class}
   \label{fig:Fleet}
 \end{figure}
@@ -57,7 +57,7 @@ further indicating the increased demand for smaller vehicles in this specific ca
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.5\linewidth]{./Figures/travels.png}
+  \includegraphics[width=.4\linewidth]{./Figures/travels.png}
   \caption{Number of rentals by class}
   \label{fig:Rentals}
 \end{figure}
@@ -90,9 +90,9 @@ $$
 \label{sub_sec:CaseStudy/Preparation}
 
 Before one could train the actual classifier the data had to be prepared to adhere to the from
-required by the framework. Using the zensus data an area description for each request was
+Required by the framework. Using the zensus data an area description for each request was
 build where the set of categories to be analyzed includes the age distribution as well as the martial status.
-$\mathbb{X} = \{ \text{AGE}, \text{MARTIAL} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
+$\mathbb{X} = \{ \text{AGE}, \text{Marital Status} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
 Subsequently rows with missing of malformed data were removed.
 
 In early training iterations another important imbalance in the dataset was discovered. Classification models
@@ -107,8 +107,44 @@ should not be dominated by the amount of vehicles of that class.
 \subsection{Classifier}
 \label{sub_sec:CaseStudy/Classifier}
 
-Resulting in a dataset that mapped the framework definition of the customer request onto 
+Resulting in a dataset that mapped the framework definition of the customer request onto the class that the customer choose.
+That data was then splitted into a training and a testing set and a Gaussian Naive Bayes classifier was fit using
+the training data. Results of the classifier are discussed in Section \ref{sec:Results}.
 
 
 \subsection{Simulation}
 \label{sub_sec:CaseStudy/Simulation}
+
+Before the actual implementation of the simulation stage, some data had to be prepared. Firstly 
+the set of stations was to be defined, setting up the real world context of the simulation 
+framework. Since the data was sourced in the city of Berlin, the simulation will also take place
+in that setting. Firstly the area data regarding the age and marital status where sourced for various
+districts in Berlin, as can be seen in Table \ref{table:Districts}. Then a subset of these were selected
+to contain stations of our proposed simulation framework. This then forms our simulation graph as can be
+seen in Figure \ref{fig:Graph}.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.5\linewidth]{./Figures/graph.png}
+  \caption{Simulation Graph}
+  \label{fig:Graph}
+\end{figure}
+
+Afterwards the distance function $L: \mathbb{E} \to \mathbb{R}$ was determined for each edge in the proposed graph and can be found
+in Table \ref{table:Distance}. Using this we can define the set of stations $\mathbb{S} = \{ \text{Pankow}, \text{Reinickendorf}, \text{Kreuzberg}, \text{Charlottenburg} \}$,
+where the area function is the identity function. Concluding the definition of the setting of the simulation.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.3\linewidth]{./Figures/hourly-demand.png}
+  \caption{Average hourly demand}
+  \label{fig:Demand}
+\end{figure}
+
+Secondly, the simulation stage also requires the average time-period between customer arrivals for each working hour.
+This was computed based on the dataset, by extracting datapoints which happened in the simulation areas $\mathbb{S}$ 
+and grouping into days and then taking the average for each hour. The resulting
+demand distribution can be seen in Figure \ref{fig:Demand}. The time period $p_h \ \forall h \in [0, 34] \subset \mathbb{N}$
+can then be determined by $p_h = \frac{1}{\text{demand}_h}$ where $\text{demand}_h$ are the values from the figure.
+
+Using this information and the classifier described in Section \ref{sub_sec:CaseStudy/Classifier}, the simulation environment
+was build in Python 3.10 using the SimPy library.

@@ -27,3 +27,45 @@
   \caption{Socio demographic category ranges}
   \label{table:Ranges}
 \end{longtable}
+
+\begin{sidewaystable}
+  \centering
+\noindent
+\begin{tabularx}{\textwidth}{|p{3cm}|*{5}X|*{5}X|}
+  \hline
+  {} & \multicolumn{5}{c|}{Age [Years]} & \multicolumn{5}{c|}{Marital Status} \\
+  {} & 0-17 & 18-29 & 30-49 & 50-64 & Over 65 & Single & Pairs & Single Parents & Parents with children & Multi person household \\
+  \textbf{District} & {}& {}& {}& {}& {}& {}& {}& {}& {}& {}\\\hline
+  Charlottenburg-Wilmersdorf &           0.12 &        0.14 &        0.30 &        0.23 &          0.20 &             0.56 &  0.20 &           0.07 &                  0.14 &                  0.03 \\\hline
+  Friedrichshain-Kreuzberg   &           0.14 &        0.23 &        0.40 &        0.14 &          0.09 &             0.54 &  0.15 &           0.07 &                  0.13 &                  0.11 \\\hline
+  Lichtenberg                &           0.13 &        0.23 &        0.32 &        0.16 &          0.17 &             0.49 &  0.24 &           0.09 &                  0.14 &                  0.04 \\\hline
+  Marzahn-Hellersdorf        &           0.05 &        0.07 &        0.34 &        0.27 &          0.27 &             0.25 &  0.64 &           0.02 &                  0.09 &                  0.00 \\\hline
+  Mitte                      &           0.14 &        0.20 &        0.36 &        0.17 &          0.12 &             0.56 &  0.17 &           0.07 &                  0.13 &                  0.06 \\\hline
+  Neukölln                   &           0.15 &        0.23 &        0.35 &        0.16 &          0.11 &             0.54 &  0.16 &           0.08 &                  0.13 &                  0.09 \\\hline
+  Pankow                     &           0.15 &        0.18 &        0.46 &        0.11 &          0.10 &             0.55 &  0.17 &           0.08 &                  0.14 &                  0.06 \\\hline
+  Reinickendorf              &           0.15 &        0.15 &        0.29 &        0.19 &          0.22 &             0.49 &  0.21 &           0.13 &                  0.12 &                  0.05 \\\hline
+  Spandau                    &           0.12 &        0.17 &        0.28 &        0.24 &          0.19 &             0.56 &  0.21 &           0.08 &                  0.13 &                  0.02 \\\hline
+  Steglitz-Zehlendorf        &           0.15 &        0.13 &        0.28 &        0.23 &          0.21 &             0.47 &  0.23 &           0.09 &                  0.18 &                  0.03 \\\hline
+  Tempelhof-Schöneberg       &           0.14 &        0.15 &        0.33 &        0.21 &          0.17 &             0.54 &  0.19 &           0.08 &                  0.14 &                  0.04 \\\hline
+  Treptow-Köpenick           &           0.16 &        0.13 &        0.31 &        0.12 &          0.28 &             0.46 &  0.21 &           0.10 &                  0.20 &                  0.03 \\\hline
+\end{tabularx}
+\captionof{table}{Districts in the Simulation
+\label{table:Districts}}
+
+\end{sidewaystable}
+
+\begin{longtable}{ | l | c  c  c  c |}
+  \hline
+  \multicolumn{1}{|r|}{\textbf{Start}} & Pankow & Reinickendorf & Kreuzberg & Charlottenburg \\
+  \textbf{Destination} & {} & {} & {} & {} \\\hline
+  Pankow & 0 & 9.08 & 9.38 & 14.18 \\
+  Reinickendorf & 9.08 & 0 & 12.39 & 8.46 \\
+  Kreuzberg & 9.38 & 12.39 & 0 & 10.05 \\
+  Charlottenburg & 14.18 & 8.46 & 10.05 & 0 \\
+  
+  \hline
+
+  \caption{L function: Distance [in km] in Simulation}
+  \label{table:Distance}
+\end{longtable}
+
