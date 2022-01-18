@@ -108,7 +108,8 @@ should not be dominated by the amount of vehicles of that class.
 \label{sub_sec:CaseStudy/Classifier}
 
 Resulting in a dataset that mapped the framework definition of the customer request onto the class that the customer choose.
-That data was then splitted into a training and a testing set and a Gaussian Naive Bayes classifier was fit using
+That data was then normalized into a zero to one range and splitted into a
+training and a testing set and a Gaussian Naive Bayes classifier was fit using
 the training data. Results of the classifier are discussed in Section \ref{sec:Results}.
 
 
@@ -147,4 +148,4 @@ demand distribution can be seen in Figure \ref{fig:Demand}. The time period $p_h
 can then be determined by $p_h = \frac{1}{\text{demand}_h}$ where $\text{demand}_h$ are the values from the figure.
 
 Using this information and the classifier described in Section \ref{sub_sec:CaseStudy/Classifier}, the simulation environment
-was build in Python 3.10 using the SimPy library.
+was build in Python 3.10 using the SimPy library. The simulation can be fed with 
