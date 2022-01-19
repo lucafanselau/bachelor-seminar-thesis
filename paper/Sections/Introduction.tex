@@ -15,7 +15,7 @@ can provide an appealing alternative to other public or private transportation m
 
 These services can be categorized into free-floating, meaning vehicles of the fleet
 can travel freely in a restricted area, and non-floating systems, where vehicles must travel
-between discrete stations that typically offer a fixed amount of spaces. Additionally
+between discrete stations that typically offer a fixed amount of spaces. Additionally,
 there is also a distinction between one-way and two-way car-sharing systems, the former
 describes services where the user can travel from point A to point B, which he can choose
 freely, while the latter expects the user to return the vehicle to the spot where it was
@@ -26,14 +26,16 @@ deploying operational decision is often bound to large expenses and, especially 
 system is already in use, can not be done in a trial and error fashion. One way to test the feasibility of
 seemingly optimal proposals rapidly is to develop a simulation which tries to capture the real world
 interaction of actors in a car sharing network to a sufficient degree. With this an operator can 
-quickly asses if the solution holds up to various real world restrictions that are characteristic
+quickly assess if the solution holds up to various real world restrictions that are characteristic
 for car sharing networks, such as demand served or, in the case of an EV car-sharing platform, the vehicle
 charge levels \shortcite[p.~224]{OptSimFramework}
 
-The focus of this seminar thesis is firstly, to analyse existing literature on CSOs and especially
+The focus of this seminar thesis is firstly, to analyze existing literature on CSOs and especially
 the use of simulation environments and the optimization problems that were solved using them.
 Secondly, to use that information to design
 and implement a discrete event simulation, that models a non-floating one-way on-demand
-car-sharing service. This simulation is then used to analyse the impacts of a vehicle
-choice model on the optimal distribution of vehicle types per station and to get
-insights on the dynamics of such a system. 
+car-sharing service. This simulation is then equipped with a vehicle choice
+classifier model, based on socio-demographic and request specific features,
+to model the real world mobility dynamics of a car-sharing network.
+The main objective of the proposed framework is to use metrics obtained by the simulation
+to study the impact of fleet size and Substitution effects on overall performance.
