@@ -2,6 +2,39 @@
 \section{Results \& Discussion}
 \label{sec:Results}
 
-Could be done better:
 
-Review feasibility of assumptions with larger datasets.
+Succeeding the implementation phase the results of the simulation framework had to be analyzed. Due
+to the complexity and high dimensionality of the problem, a focus was made on specific aspects of
+the simulation. 
+
+\subsection{Simulation Result}
+\label{sub_sec:Results/Results}
+
+A
+
+\subsection{Discussion \& Further Research}
+\label{sub_sec:Results/Discussion}
+
+As mentioned previously the topic of simulation in a large scale network, like a car-sharing network,
+is a problem with high-dimensionality, therefore providing a lot of potential further research areas.
+The focus of this thesis also included to make the simulation environment as general 
+as possible, such that additional research could be conducted on the same code base.
+
+One aspect that could be of interest, is the selection of start and end stations for
+each customer request. In the real world this is typically not equally distributed but
+often follows traffic flows, which are among others time and location dependent.
+Another potential extension of the simulation is the extension by more stations and different
+areas to potentially capture an even finer understanding of the dynamics.
+
+While training the classifier, it became apparent that the signal of the socio-demographic
+data of the rental area only correlated loosely with the decision made and feature importance
+was quite low. In further research a more sophisticated classifier could be trained that
+sources a dataset which directly correlates one rental to for example the age of the
+customer. Due to the modularity of the simulation that model could then easily be
+exchanged with the classifier trained in this thesis and used in the simulation 
+environment. 
+
+Another aspect that would be of particular interest for the simulation stage is the parameter
+$\alpha$. This parameter is not controllable by the operator but inherent for a particular
+customer. One could convey a study to try to estimate the real world $\alpha$ for different
+deployments of a car-sharing networks empirically.

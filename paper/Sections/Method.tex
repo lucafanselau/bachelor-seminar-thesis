@@ -7,7 +7,7 @@ having insights of the features determining the vehicle choice of a customer is 
 to operate in an efficient manner. This includes features like availability, travel-time
 and driving distance, but also socio-demographic features of the area in which the
 car-sharing system is deployed. During this study we will develop a classifier which 
-captures this relation and use it to analyze a inter-area connected network of stations
+captures this relation and use it to analyze an inter-area connected network of stations
 during a discrete event driven simulation phase to get insights on performance critical
 metrics.
 
@@ -43,7 +43,7 @@ specification of the distribution of $X$ for our framework:
 $$
 Z_X = \{ (r, P(X \in r)) \ |\ r \in R \}
 $$
-This values are sourced by empirical studies and are specified in the actual implementation
+These values are sourced by empirical studies and are specified in the actual implementation
 of the proposed framework.
 Due to the fact that $R$ is a partition of $K$ the following invariant must hold true: $\sum_{z \in Z_X} z = 1$.
 An area is then defined in terms of the set of categories $\mathbb{X}$ that are analyzed in the implementation 
@@ -57,7 +57,7 @@ $$
 
 The Station is an important concept for the simulation stage of the proposed framework. A station is always
 inside a particular area, namely there exists a function $\text{area}(s)$ which returns the area that the 
-station is placed in. Additionally a station has a state that is kept and updated throughout the simulation
+station is placed in. Additionally, a station has a state that is kept and updated throughout the simulation
 stage, this includes a function which for every time $t \in \mathbb{R}$ and class $c \in \mathbb{C}$ returns
 the delta of cars of class $c$ rented up until that time: $\Delta_s: \mathbb{R} \times \mathbb{C} \to \mathbb{N}$. This function
 is bounded by the parameter $C$ (Capacity), such that $\Delta_s(t, c) \ge -C \ \forall t \in \mathbb{R} \land c \in \mathbb{C}$.
@@ -73,8 +73,8 @@ is required to provide a distance mapping $L: \mathbb{E} \to \mathbb{R}$, provid
 Another crucial part is the customer request $r$, since that is the data that we will train on and use in the simulation
 environment to structure new requests. Prior to deciding on the vehicle class a user has knowledge about
 the starting station $s_{r, 0}$ and end station $s_{r, 1}$ that he/she wants to travel between. The request is also expected
-to be sourced at station $s_{r, 0}$ and therefore adheres to the socio demographic factors defined by the $\text{area}(s_{r, 0})$.
-A User request is always created inside of a station graph that describes the simulation environment and can therefore
+to be sourced at station $s_{r, 0}$ and therefore adheres to the socio-demographic factors defined by the $\text{area}(s_{r, 0})$.
+A User request is always created inside a station graph that describes the simulation environment and can therefore
 be extended by the implicit attribute $l_r$ (distance travelled), that is given by the travelled edge $e_r = (s_{r, 0}, s_{r, 1}) \in \mathbb{E}$
 and the distance measure $l_r = L(e_r)$. The set of all possible customer request will be referred to as $R$.
 
@@ -84,7 +84,7 @@ and the distance measure $l_r = L(e_r)$. The set of all possible customer reques
 Using those basic concepts we can now define a classification model whose
 main objective is to find a relation between a customer request, combining the socio-demographic factors of the area
 and the planned travel distance, and the decision that would be made. We also want to determine the
-probability of each class, so that we can later study the Substitution Effect descibed in Section \ref{sub_sec:Method/Substitution}
+probability of each class, so that we can later study the Substitution Effect described in Section \ref{sub_sec:Method/Substitution}
 that captures a equality towards different decisions and can be controlled during the
 simulation stage of the framework. We therefore propose a model whose objective is to
 approximate the function $P(c \ | \ r)$ where $c \in \mathbb{C}$ the vehicle class and  $r \in R$ the request.
@@ -92,7 +92,7 @@ Given this classifier, a prediction can be made which vehicle type is most likel
 on a particular customer request.
 
 A typical classifier that would be used in this scenario is the Naive Bayes Classifier that utilizes
-Bayes rule to rewrite the above mentioned probability into $P(c \ | \ r) = \frac{P(c)P(r \ | \ c)}{P(r)}$
+Bayes rule to rewrite the above-mentioned probability into $P(c \ | \ r) = \frac{P(c)P(r \ | \ c)}{P(r)}$
 which can then be computed based on the strong assumption of conditional independence of the features.
 Although this assumption is often violated, as with our proposed framework, since the feature groups
 are technically not independent of one another, this type of classifier delivers competitive results.
@@ -104,7 +104,7 @@ and most importantly for our setting a direct predication of posterior probabili
 
 It is however noteworthy that this decision is only
 partly driven by just the factors, that are provided by the customer request, since especially in free-floating car-sharing services
-other factors like distance to closest vehicle can dominate the actual decision process even against personal
+other factors like distance to the closest vehicle can dominate the actual decision process even against personal
 preference. To capture this effect in a simplified form we will introduce a parameter $\alpha \in \mathbb{R}$
 called the Substitution Effect, that captures the willingness to decide against the most likely
 decision at random. Formally the set of all class decision $D$ of a customer request $r \in R$ and the 
@@ -112,14 +112,14 @@ Substitution effect $\alpha$ can then be defined as follows:
 $$
   D(r, \alpha) = \{ c \ | \ c \in \mathbb{C} \land P(c \ | \ r) \ge \max\{ P(d \ | \ r) \ | \ d \in \mathbb{C} \} - \alpha \}
 $$
-This set then includes every class that with regards to the value of $\alpha$ a user would consider renting.
+This set then includes every class that with regard to the value of $\alpha$ a user would consider renting.
 
 \subsection{Simulation}
 \label{sub_sec:Method/Simulation}
 
 Understanding the dynamics of a complex system like a car-sharing system analytically is exceptionally difficult.
 One can however use Simulation to assess typical dynamics and get a quick insight on important performance metrics
-like ratio of satisfied customers, total distance driven or total sales volume. Additionally the Simulation
+like ratio of satisfied customers, total distance driven or total sales volume. Additionally, the Simulation
 environment should be easily extensible to enable further study on different network effects. 
 
 \begin{figure}[htbp]
@@ -144,20 +144,20 @@ The customer then needs to make a vehicle decision based on the request $r$ and 
  $\alpha$ resulting in $D(r, \alpha)$. The framework then calculates a more restricted set of available
 possible vehicle choices $D'(\text{area}(s), \alpha) = \{c \ |\ c \in D(\text{area}(s), \alpha) \land \Delta_s(t_0, c) > -C\}$ which
 includes the capacity restriction mentioned in Section \ref{sub_sec:Method/Concepts/Station}. If $D'$ is an empty set, the customer
-request is labeled "unsatisfied" and $r$ is added to the set of unsatisfied requests $\mathbb{UR}$. Otherwise a random unbiased choice between the classes in 
-the set $D'$ is made resulting in the chosen class $c$ and the state of the station is updated such that that 
+request is labeled "unsatisfied" and $r$ is added to the set of unsatisfied requests $\mathbb{UR}$. Otherwise, a random unbiased choice between the classes in 
+the set $D'$ is made resulting in the chosen class $c$ and the state of the station is updated such that 
 $$
 \Delta_{s_{r, 0}}(t_0 + \epsilon, c) = \Delta_{s_{r, 0}}(t_0, c) - 1
 $$.
  
 Following this the customer starts its rental and travels to $s_{r, 1}$. This takes him an amount of time $\delta t$ given by 
-$\delta t = l_r / \text{AS}$ where AS (average speed) is the average speed of urban commute. This customer then reaches
+$\delta t = l_r / \text{AS}$ where $AS$ (average speed) is the average speed of urban commute. This customer then reaches
 station $s_{r, 1}$ at time $t_1 = t_0 + \delta t$ and increases the delta function of the target station similarly to
 $$
 \Delta_{s_{r, 1}}(t_1 + \epsilon, c) = \Delta_{s_{r, 1}}(t_1, c) + 1
 $$.
 
-The rental is then counted as complete, added to the set of satisfied requests $mathbb{SR}$ and the total profit $\pi$ is increased by $\text{cost}(c, l_r)$, completing the
+The rental is then counted as complete, added to the set of satisfied requests $\mathbb{SR}$ and the total profit $\pi$ is increased by $\text{cost}(c, l_r)$, completing the
 customer request process. One run of the simulation framework simulates a whole day and includes the station network
 as a shared resource.
 
@@ -167,7 +167,7 @@ as a shared resource.
 
 Resulting in performance metrics that can give valuable insights on the dynamics of the environment and
 allows to analyze the effects of the models parameters such as the Substitution Effect $\alpha$ and the
-capacity restriction $C$. The metrics can be loosely structured into time dependant and time independent metrics
+capacity restriction $C$. The metrics can be loosely structured into time dependent and time independent metrics
 and are present in the following section:
 
 \vspace*{2ex}
@@ -177,8 +177,9 @@ and are present in the following section:
   \textbf{Metric} & \textbf{Defintion} & \textbf{Description} \\
   \hline
   \multicolumn{3}{@{}l}{Time independent metrics:} \\\hline 
-  URR & $\frac{|UR|}{|UR| \times |SR|}$ & The \textbf{U}nsatisfied \textbf{R}equest \textbf{R}atio, eg. the ratio of unsatisfied customers to all customers \\
+  URR & $\frac{|\mathbb{UR}|}{|\mathbb{UR}| + |\mathbb{SR}|}$ & The \textbf{U}nsatisfied \textbf{R}equest \textbf{R}atio, eg. the ratio of unsatisfied customers to all customers \\
   $\pi$ & {--} & The total profit of the simulation \\
+  TD & $\sum_{r \in \mathbb{SR}} l_r$ & The total distance driven during the day \\
   \hline
   \multicolumn{3}{@{}l}{Time dependent metrics:} \\
   \hline

@@ -1,10 +1,28 @@
 from math import floor
+from typing import Tuple
 import simpy
 from simpy.core import SimTime
 import pandas as pd
 import numpy as np
 
 classes = ['L', 'M', 'S', 'XS']
+
+def cost(c: str, t: float):
+    s = 0
+    b = 0
+    match c:
+        case "L":
+            s = 0.34
+            b = 0.99
+        case "M":
+            s = 0.31
+            b = 0.99
+        case "S":
+            s = 0.28
+        case "XS":
+            s = 0.09
+    
+    return t * s + b
 
 
 class Station:
@@ -38,6 +56,30 @@ class Station:
             return tdf
         self.history_df = { c: to_df(c) for c in classes }
 
+# simulation_districts = ["Pankow", "Reinickendorf", "Friedrichshain-Kreuzberg", "Charlottenburg-Wilmersdorf"]
+
+def order_independant_distance(a: Tuple[Station, Station]):
+        match a:
+            case (Station(name="Pankow"), Station(name="Reinickendorf")):
+                return 9.08
+            case (Station(name="Pankow"), Station(name="Friedrichshain-Kreuzberg")):
+                return 9.38
+            case (Station(name="Pankow"), Station(name="Charlottenburg-Wilmersdorf")):
+                return 14.18
+            case (Station(name="Reinickendorf"), Station(name="Friedrichshain-Kreuzberg")):
+                return 12.39
+            case (Station(name="Reinickendorf"), Station(name="Charlottenburg-Wilmersdorf")):
+                return 8.46
+            case (Station(name="Friedrichshain-Kreuzberg"), Station(name="Charlottenburg-Wilmersdorf")):
+                return 10.05
+        return None
+
+def station_distance(start: Station, end: Station):
+    t = (start, end)
+    r_1 = order_independant_distance(t)
+    if r_1 is not None:
+        return r_1
+    return order_independant_distance(t[::-1])
 
 class Simulation:
 
@@ -50,20 +92,28 @@ class Simulation:
         self.capacity = capacity
         self.pred = pred
 
-        self.unsatisfied = []
+        self.unsatisfied = np.array([])
+        self.satisfied = np.array([])
+        self.pi = 0
+        self.td = 0
 
         env.process(self.spawner(env))
 
         env.run(until=60 * 24)
 
+        # After execution compute metrics
         for s in self.stations:
             s.to_dataframes()
         
+        self.urr = self.unsatisfied.size / (self.unsatisfied.size + self.satisfied.size)
+        
     def customer(self, env: simpy.Environment, start: Station, dest: Station):
 
-        # TODO: Create customer request
         # - Distance
-        distance = 4
+        # TODO: Maybe this should be controllable by the outside environment
+        distance = station_distance(start, dest)
+        if distance is None:
+            print(f"{distance} from: {start.name} to: {dest.name}")
         # - Area data
         X = [distance, *start.area_data]
         
@@ -101,6 +151,12 @@ class Simulation:
         # Update end state
         dest.increase_stock(c, env.now)
 
+        # Add to satisfied customers
+        self.satisfied = np.append(self.satisfied, [X])
+        # Increase total profit
+        self.pi += cost(c, t)
+        self.td += distance
+
 
     def spawner(self, env: simpy.Environment):
         while True:
@@ -114,6 +170,10 @@ class Simulation:
             (start, destination) = np.random.choice(self.stations, size=2, replace=False)
             env.process(self.customer(env, start, destination))
             
+    def print_metrics(self):
+        print("URR: {:.2f}%".format(self.urr * 100))
+        print("Profit: {:.3f}€".format(self.pi))
+        print("Total distance driven: {:.3f}km".format(self.td))
 
 
 

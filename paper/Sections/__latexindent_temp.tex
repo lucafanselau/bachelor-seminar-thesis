@@ -3,23 +3,23 @@
 \label{sec:CaseStudy}
 
 The methods described in Section \ref{sec:Method} are now applied to the specific case
-of ShareNow in Berlin during a period between October 2019 and March 2020. Firstly
-we will discuss ShareNow as a company and then later the dataset and the insights it
+of SHARE NOW in Berlin during a period between October 2019 and March 2020. Firstly
+we will discuss SHARE NOW as a company and then later the dataset and the insights it
 can deliver as well as the trained classifier and its application in the Simulation
 environment we have described above. 
 
 \subsection{SHARE NOW}
 
-ShareNow is the world wide leading free-floating car-sharing service.
+SHARE NOW is the worldwide leading free-floating car-sharing service.
 As a free-floating service the user can pick up an available car anywhere in a defined zone
-and finish the trip anywhere in that zone. It is currently available in 16 european cities
+and finish the trip anywhere in that zone. It is currently available in 16 European cities
 with 11000 vehicles, with nearly 3000 electric vehicles. With about 3.4 million customers
-it has a unprecedented set of car-sharing users \cite{ShareNowAboutUs}. It was founded as 
+it has an unprecedented set of car-sharing users \cite{ShareNowAboutUs}. It was founded as 
 part of a larger a joint venture of the BMW Group and the Daimler AG, which also includes
 services like PARK NOW, CHARGE NOW, REACH NOW and FREE NOW. Both firms brought in their
 existing car-sharing solutions, namely Car2Go a subsidiary of the Daimler AG and DriveNow
-a subsidiary of the BMW Group. The merge led to an increase in ease of use for customers
-while the venture parties could secure the leading market share at many of europeans
+a subsidiary of the BMW Group into the joint venture. The merge led to an increase in ease of use for customers
+while the venture parties could secure the leading market share at many of Europeans
 largest car-sharing sites.
 
 
@@ -43,17 +43,16 @@ distribution.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.3\linewidth]{./Figures/fleet.png}
+  \includegraphics[width=.4\linewidth]{./Figures/fleet.png}
   \caption{Number of unique vehicles by class}
   \label{fig:Fleet}
 \end{figure}
 
 As can be seen in Figure \ref{fig:Fleet} the number of vehicles of each type is far from equally distributed.
-The dominant model in terms of number of vehicles is by far the smart fortwo with 1007 unique vehicles, 
+The dominant model in terms of number of vehicles is by a large margin the smart fortwo with 1007 unique vehicles, 
 offering a high value proposition
 in terms of parking space and ease of use for urban commuting. A clear tendency towards smaller cars, such as smarts
-or minis is visible in the distribution. The least common model on the other hand is the BMW X2 with just 29 unique vehicles,
-further indicating the increased demand for smaller vehicles in this specific car-sharing system.
+or minis is visible in the distribution.
 
 \begin{figure}[htbp]
   \centering
@@ -62,29 +61,17 @@ further indicating the increased demand for smaller vehicles in this specific ca
   \label{fig:Rentals}
 \end{figure}
 
-As can be seen in Figure \ref{fig:Rentals} the actual realized demand of each model maps quite nicely
-onto the number of unique vehicles in the fleet with only a few exception. Notably though the smart has
-seen even more demand then indicated by the number of vehicles. While the sum of all mini vehicles in terms
-of unique vehicles comes close to the number of smarts deployed, the number of unique rentals of a smart
-is greater then the sum of rentals made with all other vehicle types.
+The actual amount of rentals, as shown in Figure \ref{fig:Rentals} has a very similar order to the fleet size 
+with only a few exceptions. Notably though the smart has
+seen even more demand than indicated by the number of vehicles.
 
 The missing component however is the set of decidable classes. Similarly to the real world fleet deployment the
 set of models is structured in terms of vehicle classes, namely $\mathbb{C} = \{ \text{XS}, \text{S}, \text{M}, \text{L} \}$.
 Then each model was assigned to its matching class which can be found in table \ref{table:VehicleClasses}.
 These classes play an important role in the operational management of the car-sharing fleet since they differ in terms of costs and therefore profit.
-Another important aspect of these classes is that younger drivers, in the case of SHARE NOW in Germany drivers below an age of 21, are typically
-restricted to the lowest class, which for this specific case contains just the model type smart fortwo and might explain
-the extremely high demand for that model. Additionally we will define the cost function used in the simulation stage
+ Additionally, we will define the cost function used in the simulation stage
 of the framework based on the actual minute based pricing model of SHARE NOW. Although SHARE NOW also offers other tariffs we will focus one
-the on-demand minute based charge system for this implementation \cite{ShareNowPricing}.
-$$
-C(c, t) = \begin{cases}
-  t * 0.09, & \text{if $c$ = XS}\\
-  t * 0.28, & \text{if $c$ = S}\\
-  t * 0.31 + 0.99, & \text{if $c$ = M}\\
-  t * 0.34 + 0.99, & \text{if $c$ = L}\\
- \end{cases}
-$$
+the on-demand minute based charge system for this implementation \cite{ShareNowPricing}. The resulting function can be found in Table \ref{table:CostFunction}.
 
 \subsection{Data preparation}
 \label{sub_sec:CaseStudy/Preparation}
@@ -101,21 +88,29 @@ vehicles from that class. To counteract that, since the set of features was miss
 of vehicles the data for each class was shuffled and truncated in such a way that
 $\frac{nv(c_a)}{nv(c_b)} = \frac{nd(c_a)}{nd(c_b)} \ \forall c_a, c_b \in \mathbb{C}$, where $nv: \mathbb{C} \to \mathbb{N}$ is a function
 that returns the number of vehicles of a specific category and $nd: \mathbb{C} \to \mathbb{N}$ is a function that returns the
-amount of datapoints in the training set for each category. Leading to a dataset where the decision for a vehicle
-should not be dominated by the amount of vehicles of that class.
+amount of datapoints in the training set for each category. Reducing the impact of the availability of vehicles for
+the classification task.
 
 \subsection{Classifier}
 \label{sub_sec:CaseStudy/Classifier}
 
 Resulting in a dataset that mapped the framework definition of the customer request onto the class that the customer choose.
-That data was then normalized into a zero to one range and splitted into a
-training and a testing set and a Gaussian Naive Bayes classifier was fit using
-the training data. Results of the classifier are discussed in Section \ref{sec:Results}.
+That data was then normalized into a zero to one range and split into a
+training and a testing set and a Complement Naive Bayes classifier (CNB) was fit using
+the training data. A Complement Naive Bayes Classifier is an adaption of a Multinomial Naive Bayes classifier, most
+prominently known from text classification tasks. Additionally, the CNB typically has an advantage when dealing
+with imbalanced dataset such as ours \cite{rennie2003tackling}.
 
 
 \subsection{Simulation}
 \label{sub_sec:CaseStudy/Simulation}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.5\linewidth]{./Figures/graph.png}
+  \caption{Simulation Graph}
+  \label{fig:Graph}
+\end{figure}
 Before the actual implementation of the simulation stage, some data had to be prepared. Firstly 
 the set of stations was to be defined, setting up the real world context of the simulation 
 framework. Since the data was sourced in the city of Berlin, the simulation will also take place
@@ -123,12 +118,7 @@ in that setting. Firstly the area data regarding the age and marital status wher
 districts in Berlin, as can be seen in Table \ref{table:Districts}. Then a subset of these were selected
 to contain stations of our proposed simulation framework. This then forms our simulation graph as can be
 seen in Figure \ref{fig:Graph}.
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=.5\linewidth]{./Figures/graph.png}
-  \caption{Simulation Graph}
-  \label{fig:Graph}
-\end{figure}
+
 
 Afterwards the distance function $L: \mathbb{E} \to \mathbb{R}$ was determined for each edge in the proposed graph and can be found
 in Table \ref{table:Distance}. Using this we can define the set of stations $\mathbb{S} = \{ \text{Pankow}, \text{Reinickendorf}, \text{Kreuzberg}, \text{Charlottenburg} \}$,
@@ -136,8 +126,8 @@ where the area function is the identity function. Concluding the definition of t
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.3\linewidth]{./Figures/hourly-demand.png}
-  \caption{Average hourly demand}
+  \includegraphics[width=.5\linewidth]{./Figures/hourly-demand.png}
+  \caption{Average hourly demand of selected districts}
   \label{fig:Demand}
 \end{figure}
 
@@ -148,4 +138,7 @@ demand distribution can be seen in Figure \ref{fig:Demand}. The time period $p_h
 can then be determined by $p_h = \frac{1}{\text{demand}_h}$ where $\text{demand}_h$ are the values from the figure.
 
 Using this information and the classifier described in Section \ref{sub_sec:CaseStudy/Classifier}, the simulation environment
-was build in Python 3.10 using the SimPy library. The simulation can be fed with 
+was build in Python 3.10 using the SimPy library. The simulation receives the parameters $\alpha, C$ (Substitution Effect, Capacity),
+the set of stations to be simulated, the hourly demand as well as the predictor function. That way different kind of classifiers
+could be trained to quickly assess the performance of different classification models. The implementation
+is also available as part of the publicly available accompanying GitHub repository.
