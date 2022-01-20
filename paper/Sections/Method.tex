@@ -85,11 +85,11 @@ Using those basic concepts we can now define a classification model whose
 main objective is to find a relation between a customer request, combining the socio-demographic factors of the area
 and the planned travel distance, and the decision that would be made. We also want to determine the
 probability of each class, so that we can later study the Substitution Effect described in Section \ref{sub_sec:Method/Substitution}
-that captures a equality towards different decisions and can be controlled during the
+that captures an equality towards different decisions and can be controlled during the
 simulation stage of the framework. We therefore propose a model whose objective is to
 approximate the function $P(c \ | \ r)$ where $c \in \mathbb{C}$ the vehicle class and  $r \in R$ the request.
 Given this classifier, a prediction can be made which vehicle type is most likely to be chosen based
-on a particular customer request.
+on a particular customer request. The statistical evidence for this relation is given by \shortciteA{JIAN2017362} 
 
 A typical classifier that would be used in this scenario is the Naive Bayes Classifier that utilizes
 Bayes rule to rewrite the above-mentioned probability into $P(c \ | \ r) = \frac{P(c)P(r \ | \ c)}{P(r)}$
@@ -165,23 +165,24 @@ as a shared resource.
 \subsection{Metric \& Performance}
 \label{sub_sec:Method/Metrics}
 
-Resulting in performance metrics that can give valuable insights on the dynamics of the environment and
+Resulting in performance metrics that can give measurable insights on the dynamics of the environment and
 allows to analyze the effects of the models parameters such as the Substitution Effect $\alpha$ and the
-capacity restriction $C$. The metrics can be loosely structured into time dependent and time independent metrics
-and are present in the following section:
+capacity restriction $C$. The presented metrics aim to be of importance for operational decision-making
+and connect the results of the simulation stage to real world performance of a car-sharing network.
 
-\vspace*{2ex}
-\noindent
+\vspace*{4ex}
 \renewcommand\tabularxcolumn[1]{m{#1}}
-\begin{tabularx}{\textwidth}{@{}c|c|X@{}}
+\renewcommand{\arraystretch}{1.6}
+\begin{center}
+\centering
+\begin{tabularx}{0.9\linewidth}{@{}c|c|X@{}}
   \textbf{Metric} & \textbf{Defintion} & \textbf{Description} \\
   \hline
-  \multicolumn{3}{@{}l}{Time independent metrics:} \\\hline 
   URR & $\frac{|\mathbb{UR}|}{|\mathbb{UR}| + |\mathbb{SR}|}$ & The \textbf{U}nsatisfied \textbf{R}equest \textbf{R}atio, eg. the ratio of unsatisfied customers to all customers \\
-  $\pi$ & {--} & The total profit of the simulation \\
+  $\pi$ & {--} & The total profit of the simulation, calculated as part of the simulation stage \\
   TD & $\sum_{r \in \mathbb{SR}} l_r$ & The total distance driven during the day \\
-  \hline
-  \multicolumn{3}{@{}l}{Time dependent metrics:} \\
-  \hline
 \end{tabularx}
+\end{center}
+
+\renewcommand{\arraystretch}{1}
 
