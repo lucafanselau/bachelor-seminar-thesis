@@ -1,73 +1,26 @@
-\clearpage
-\section{Literature Review}
-\label{sec:lr}
+\section{Conclusion}
+\label{sec:Conclusion}
 
-A lot of pervious research on car-sharing and its impact has been conducted throughout
-the last two decades. The focus of this section is to provide an overview of papers 
-that convey relevant information to the simulation environment or the topic of vehicle
-choice. For a broader literature review and further research pointers the reader can 
-refer to dedicated papers on the topic such as \shortciteA{ILLGEN2019193} or \shortciteA{FERRERO2018501}.
+This research aimed to develop a discrete event simulation and integrate a classification model
+to get measurable insights into the mobility dynamics of a car-sharing system. By introducing a
+simulation framework and defining operationally important performance metrics, a clear
+positive dependency of overall performance to the value of the Substitution effect and the
+fleet capacity has been identified. This has proven the ability to use simulation environments, 
+sourced with real world data, to gain insights applicable to real world scenarios and guide
+operational decision-making. Therefore, an answer to the main research question proposed in Section \ref{sec:Intro},
+about the impact of the parameters $\alpha$, the Substitution effect, and $C$, the capacity,
+has been found, and a simulation model has been designed 
+that can be used as a foundation to perform additional research in the field of large
+scale car-sharing system.
 
-\shortciteA{JIAN2017362} has proposed a Multiple discrete-continuous extreme value (MDCEV) to predict 
-a user vehicle type preference. Additionally, a simulation procedure is employed to evaluate the MDCEV
-models, these results are then quantified by goodness-of-fit in regard to the data source.
-The proposed model was developed to provide a useful tool for operators of car-sharing fleets.
-They could prove a consistency of customer usage patterns regarding travel time, mileage and
-monetary expenditure. Furthermore, an effect of various socio-demographic features such
-as income, age, urban structure indicating a statistical significance of these features
-regarding the vehicle choice, that will also be discussed in this thesis.
-As part of the MDCEV modeling procedure the satiation parameter was determined, that captures
-the willingness to drive more with the current choice of vehicle type. It indicated that this
-correlates with the usability, ease of driving and driving experience. Overall this paper
-laid down a basis for the vehicle choice model in this paper and provided sufficient evidence that
-a statistical important of the described features exists based on real world data.
+As outlined in Section \ref{sub_sec:Results/Discussion} the
+proposed framework has multiple aspects that could be improved in further research but these
+enhancements would
+exceed the scope of this thesis. Overall the method of discrete event simulation has shown to be a
+good fit to model this complex subject and provide a computationally efficient way of
+quantitative analysis of the environment. To increase the applicability of the model for real-world
+usage some as the assumptions, such as the equal spacial distribution of customer request should be
+revisited.
 
-\shortciteA{Nourinejad2014} research has provided a dynamic optimization-simulation model for 
-one-way car-sharing networks, that acts based on
-online requests and tries to maximize system profit. This is in contrast to the on-demand
-framework that is developed throughout this thesis. Their research aims to study the effects
-of fleet size and factors which impact fleet size and vehicle relocation cost. A benchmark
-model is proposed that has complete knowledge and calculates an optimal solution, together with
-the dynamic model, that could be used as a support tool for CSO operations. They also outlined
-the benefits of a discrete event simulation framework from a computational standpoint. Findings
-of the paper included a positive correlation of optimal fleet size and demand and that
-the mean required fleet size per demand decreases with higher demand. They also were able to
-quantify the operational effects of reservation times of 30 min, in contrast to the on-demand
-model can lead to a reduction in fleet size of up to 86\%. Additionally, they
-concluded the dynamic model, without total knowledge, converges to the results calculated
-by the benchmark model and therefore verifies the feasibility of a discrete event driven
-simulation for further studies. 
-
-\shortciteA{PERBOLI2017} have used a simulation approach to study the effects of customized
-tariff plans from the business model point of view. The proposed tool simulates different tariff plans
-with regard to different profiles of car-sharing users, according to mobility needs and urban structure.
-This is verified with the specific case of Turin, Italy. During the study different car-sharing Organizations
-are characterized in terms of their Business Model Canvas, a structured form of the companies main business
-aspects. A separation of a user profiles was made, into three distinct classes: commuters, professional users
-and casual users, each differing in time of departure and range of distance. Findings for the specific
-case of Turin include a favorability of dynamic pricing structures and concluded that private vehicle ownership
-is beneficial, in regard to the best performing car-sharing service in Turin at that time, only after about 8000 km/year
-for casual users and 10000 km/year for commuters or professional users. Additionally, a strong emphasis was 
-made on the importance of simulation based models in car-sharing operation management.
-
-\shortciteA{JOCHEM2020373} have conveyed a survey to study the effects of car-sharing
-membership on individuals, with the specific case of SHARE NOW which is also the basis
-for the simulation in this thesis. They specifically focused on the effects of such a 
-membership on the car ownership. In an optimistic case one car-sharing car could replace
-up to 20 regular vehicles. 
-
-\shortciteA{OptSimFramework} developed an integrated multi objective mixed integer
-linear programming optimization framework to optimize operational decision in regard to
-vehicle and personnel relocation in a car-sharing system with reservations. The output of 
-the optimization phase was then tested in terms of feasibility by a discrete event simulation
-stage. The determining factor of feasibility used is if the charge levels of electric vehicles
-would be enough the satisfied a calculated schedule. The car-sharing system covered in this paper
-was a non-floating one-way car-sharing system as also covered in this thesis. Findings of this
-study includes a near linear dependency of demand to amount of relocation necessary and also
-verified the positive benefits from an operational standpoint that car-sharing services with reservation
-times enable, as was also discovered by \shortciteA{Nourinejad2014}. Additionally, the benefit of controlling
-demand by incentives/disincentives was discovers, as a higher amount of requests with the same 
-resources could be served. This paper also used a clustering algorithm to group demand patterns into
-general area, which closely mimics the concept of stations, introduced in Section \ref{sub_sec:Method/Concepts/Station},
-this enabled the simulation to find results of real-world importance while simultaneously reducing
-computational complexity.
+The implementation of the study as well as the source for this thesis can be found on GitHub, to 
+simplify further research on the simulation framework \shortcite{Repo}.
