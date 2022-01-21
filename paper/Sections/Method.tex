@@ -112,14 +112,14 @@ Substitution effect $\alpha$ can then be defined as follows:
 $$
   D(r, \alpha) = \{ c \ | \ c \in \mathbb{C} \land P(c \ | \ r) \ge \max\{ P(d \ | \ r) \ | \ d \in \mathbb{C} \} - \alpha \}
 $$
-This set then includes every class that with regard to the value of $\alpha$ a user would consider renting.
+This set then includes every class that in regard to the value of $\alpha$ a user would consider renting.
 
 \subsection{Simulation}
 \label{sub_sec:Method/Simulation}
 
 Understanding the dynamics of a complex system like a car-sharing system analytically is exceptionally difficult.
 One can however use Simulation to assess typical dynamics and get a quick insight on important performance metrics
-like ratio of satisfied customers, total distance driven or total sales volume. Additionally, the Simulation
+like ratio of satisfied customers, total distance driven or total profit. Additionally, the Simulation
 environment should be easily extensible to enable further study on different network effects. 
 
 \begin{figure}[htbp]
@@ -129,7 +129,7 @@ environment should be easily extensible to enable further study on different net
   \label{fig:Flow}
 \end{figure}
 
-A discrete-event simulation is employed, as described in Figure \ref{fig:Flow}, that aims to model a typical day of operation
+A discrete-event simulation is employed that aims to model a typical day of operation
 for the car-sharing network. A discrete event simulation is a simulation where the flow of time is not continuous but driven
 by events, such as time passed. It enables a computational efficient way to model complex systems and is a good fit for the
 proposed simulation. A discrete event simulation consists of processes that can interact with other processes, access and modify
@@ -137,15 +137,15 @@ shared resources and create and listen to events.
 
 The process that a typical customer request would flow through is given by Figure \ref{fig:Flow}. The flow is started by the
 event that a customer request is sourced. This event happens periodically based on the average time period of demand $p_h$, determined
-beforehand by existing demand data for each hour of the day $h \in [0,24)$. The timestamp a customer request is registered with the system
+beforehand by existing demand data for each hour of the day $h \in [0,24) \subset \mathbb{N}$. The timestamp a customer request is registered with the system
 is called $t_0$ from now on.
 
 The customer then needs to make a vehicle decision based on the request $r$ and the current Substitution Effect
  $\alpha$ resulting in $D(r, \alpha)$. The framework then calculates a more restricted set of available
-possible vehicle choices $D'(\text{area}(s), \alpha) = \{c \ |\ c \in D(\text{area}(s), \alpha) \land \Delta_s(t_0, c) > -C\}$ which
+possible vehicle choices $D'(r, \alpha) = \{c \ |\ c \in D(r, \alpha) \land \Delta_{s_{r, 0}}(t_0, c) > -C\}$ which
 includes the capacity restriction mentioned in Section \ref{sub_sec:Method/Concepts/Station}. If $D'$ is an empty set, the customer
 request is labeled "unsatisfied" and $r$ is added to the set of unsatisfied requests $\mathbb{UR}$. Otherwise, a random unbiased choice between the classes in 
-the set $D'$ is made resulting in the chosen class $c$ and the state of the station is updated such that 
+the set $D'$ is made resulting in the chosen class $c$ and the state of the start station is updated such that 
 $$
 \Delta_{s_{r, 0}}(t_0 + \epsilon, c) = \Delta_{s_{r, 0}}(t_0, c) - 1
 $$.
@@ -157,7 +157,7 @@ $$
 \Delta_{s_{r, 1}}(t_1 + \epsilon, c) = \Delta_{s_{r, 1}}(t_1, c) + 1
 $$.
 
-The rental is then counted as complete, added to the set of satisfied requests $\mathbb{SR}$ and the total profit $\pi$ is increased by $\text{cost}(c, l_r)$, completing the
+The rental is then counted as complete, added to the set of satisfied requests $\mathbb{SR}$ and the total profit $\pi$ is increased by $\text{cost}(c, \delta t)$, completing the
 customer request process. One run of the simulation framework simulates a whole day and includes the station network
 as a shared resource.
 

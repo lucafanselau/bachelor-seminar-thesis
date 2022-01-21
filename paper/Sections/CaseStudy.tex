@@ -67,7 +67,7 @@ seen even more demand than indicated by the number of vehicles.
 
 The missing component however is the set of decidable classes. Similarly to the real world fleet deployment the
 set of models is structured in terms of vehicle classes, namely $\mathbb{C} = \{ \text{XS}, \text{S}, \text{M}, \text{L} \}$.
-Then each model was assigned to its matching class which can be found in table \ref{table:VehicleClasses}.
+Then each model was assigned to a class, the mapping can be found in Table \ref{table:VehicleClasses}.
 These classes play an important role in the operational management of the car-sharing fleet since they differ in terms of costs and therefore profit.
  Additionally, we will define the cost function used in the simulation stage
 of the framework based on the actual minute based pricing model of SHARE NOW. Although SHARE NOW also offers other tariffs we will focus one
@@ -76,10 +76,10 @@ the on-demand minute based charge system for this implementation \cite{ShareNowP
 \subsection{Data preparation}
 \label{sub_sec:CaseStudy/Preparation}
 
-Before one could train the actual classifier the data had to be prepared to adhere to the from
-Required by the framework. Using the zensus data an area description for each request was
+Before one could train the actual classifier the data had to be prepared to adhere to the form
+required by the framework. Using the Zensus data an area description for each request was
 build where the set of categories to be analyzed includes the age distribution as well as the martial status.
-$\mathbb{X} = \{ \text{AGE}, \text{Marital Status} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
+$\mathbb{X} = \{ \text{Age}, \text{Marital Status} \}$. Then ranges for each were defined as can be seen in Table \ref{table:Ranges}.
 Subsequently rows with missing of malformed data were removed.
 
 In early training iterations another important imbalance in the dataset was discovered. Classification models
@@ -136,6 +136,7 @@ This was computed based on the dataset, by extracting datapoints which happened 
 and grouping into days and then taking the average for each hour. The resulting
 demand distribution can be seen in Figure \ref{fig:Demand}. The time period $p_h \ \forall h \in [0, 34] \subset \mathbb{N}$
 can then be determined by $p_h = \frac{1}{\text{demand}_h}$ where $\text{demand}_h$ are the values from the figure.
+Additionally, the value of $AS$ the average speed of urban commute was determined from the dataset to be $AS = 126.39 \frac{\text{m}}{\text{min}}$.
 
 Using this information and the classifier described in Section \ref{sub_sec:CaseStudy/Classifier}, the simulation environment
 was build in Python 3.10 using the SimPy library. The simulation receives the parameters $\alpha, C$ (Substitution Effect, Capacity),

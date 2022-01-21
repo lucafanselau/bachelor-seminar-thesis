@@ -32,8 +32,8 @@ signal, that is due to the random nature of the simulation environment, increase
 \end{figure}
 
 A very similar effect can be seen in Figure \ref{fig:Capacity} with the parameter $C$,
-the capacity at each station. For these the alpha value has been set to $\alpha = 0.05$ 
-to decrease the effect of that parameter. From an operational standpoint an optimal
+the capacity at each station. For these the alpha value has been set to $\alpha = 0.05$,
+the optimal value based on previous results. From an operational standpoint an optimal
 fleet capacity could be determined by averaging the metrics over multiple runs
 and define a threshold below which the increase in overall performance with regard to the
 increase in fleet size provides no added value to the network. This effect was also discovered
@@ -47,7 +47,7 @@ by \shortciteA{Nourinejad2014}.
 \end{figure}
 
 Lastly the state function of the stations $\Delta_s(t, c)$ has been plotted against the
-simulation time, to get insights of the state of the station throughout the working day.
+simulation time, to get insights of the state at each station throughout the working day.
 As can be seen in Figure \ref{fig:DeltaFunc}, the impact of the demand described in Figure \ref{fig:Demand}
 is clearly visible. Especially during the rush hour in the late afternoon all stations
 reach capacity limits, but just about manage to keep up with an unsatisfied customer rate (URR)
@@ -64,8 +64,8 @@ as possible, such that additional research could be conducted on the same code b
 One aspect that could be of interest, is the selection of start and end stations for
 each customer request. In the real world this is typically not equally distributed but
 often follows traffic flows, which are among others time and location dependent.
-Another potential extension of the simulation is the extension by more stations and different
-areas to potentially capture an even finer understanding of the dynamics.
+Another potential extension, could include an increased set of stations $\mathbb{S}$ to
+study even larger car-sharing networks.
 
 While training the classifier, it became apparent that the signal of the socio-demographic
 data of the rental area only correlated loosely with the decision made, and feature importance
@@ -77,5 +77,5 @@ environment.
 
 Another aspect that would be of particular interest for the simulation stage is the parameter
 $\alpha$. This parameter is not controllable by the operator but inherent for a particular
-customer. One could convey a study to try to estimate the real world $\alpha$ for different
+customer group. One could convey a study to try to estimate the real world $\alpha$ for different
 deployments of a car-sharing networks empirically.
